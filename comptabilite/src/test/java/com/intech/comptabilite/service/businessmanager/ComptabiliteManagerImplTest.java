@@ -1,5 +1,7 @@
 package com.intech.comptabilite.service.businessmanager;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
@@ -63,6 +65,25 @@ public class ComptabiliteManagerImplTest {
         		() -> {
         		manager.checkEcritureComptableUnit(vEcritureComptable);}
         );
+    }
+    
+    @Test void checkEcritureComptableUnitRG5() throws FunctionalException {
+        EcritureComptable vEcritureComptable;
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.setReference("AC-2022/00001");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+        
+        Boolean isValid = manager.checkEcritureComptableReference(vEcritureComptable);
+        assertTrue(isValid);
+        
     }
 
     @Test

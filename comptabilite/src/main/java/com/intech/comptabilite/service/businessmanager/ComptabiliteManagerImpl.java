@@ -89,10 +89,11 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
 
     /**
      * {@inheritDoc}
+     * @return 
      */
     // TODO à tester
     @Override
-    public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+    public Boolean checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
         this.checkEcritureComptableUnit(pEcritureComptable);
         this.checkEcritureComptableContext(pEcritureComptable);
     }
@@ -139,9 +140,13 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
                 "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
         }
         
-        if (this.checkEcritureComptableReference(pEcritureComptable)) {
-            throw new FunctionalException("La référence");
-        }
+        
+        if(pEcritureComptable.getReference() != null) {
+            if (!this.checkEcritureComptableReference(pEcritureComptable)) {
+                throw new FunctionalException("La référence n'est pas bien formé");
+            }
+        } 
+
 
     }
     
@@ -157,6 +162,7 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
         String regex = "^" + code + "-" + year + "\\/\\d{5}";
         
         Boolean isRefValid = ref.matches(regex);
+
         return isRefValid;
     }
 
