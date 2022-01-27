@@ -27,14 +27,11 @@ public class CompteComptableServiceTest {
 	@Mock
 	CompteComptableRepository repository;
 	
-	/* Sorry toujours pareil pas l'habitude de manipuler la data avec des repository
-	 * @Test
+	@Test
 	public void getCompteComptableList() {
-        
         List<CompteComptable> res = compteComptableService.getListCompteComptable();
-        assertEquals(repository.findAll(), res);     
-
-	}*/
+        assertEquals(7, res.size());     
+	}
 	
 	@Test
 	public void getCompteComptableByNumero() {

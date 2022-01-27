@@ -1,11 +1,16 @@
 package com.intech.comptabilite.service.businessmanager;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,6 +18,8 @@ import com.intech.comptabilite.model.CompteComptable;
 import com.intech.comptabilite.model.EcritureComptable;
 import com.intech.comptabilite.model.JournalComptable;
 import com.intech.comptabilite.model.LigneEcritureComptable;
+import com.intech.comptabilite.model.SequenceEcritureComptable;
+import com.intech.comptabilite.repositories.SequenceEcritureComptableRepository;
 import com.intech.comptabilite.service.exceptions.FunctionalException;
 
 @SpringBootTest
@@ -20,6 +27,9 @@ public class ComptabiliteManagerImplTest {
 
 	@Autowired
     private ComptabiliteManagerImpl manager;
+	
+	@Mock
+	SequenceEcritureComptableRepository seqRepository;
 
     @Test
     public void checkEcritureComptableUnit() throws Exception {
@@ -106,6 +116,36 @@ public class ComptabiliteManagerImplTest {
         		}
         );
                 
+    }
+    
+    @Test
+    public void testCheckAddReferenceWhenThereSNoEntryInSequenceForThisYear() {
+    	SequenceEcritureComptable sequence = new SequenceEcritureComptable("AC", 2021, 12);
+    	List sequenceList = new ArrayList();
+    	sequenceList.add(sequence);
+    	
+        EcritureComptable vEcritureComptable;
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+        
+    	when(seqRepository.findAll()).thenReturn(sequenceList);
+    	manager.addReference(vEcritureComptable);
+    	
+    	// Trouver comment utiliser l'orm ?? 
+    	//assertEquals(1, )
+    	
+    	
+    	
+    	
+    	
     }
 
 }
