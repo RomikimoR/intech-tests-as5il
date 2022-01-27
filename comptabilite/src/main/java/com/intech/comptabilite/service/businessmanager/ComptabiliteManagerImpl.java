@@ -2,6 +2,8 @@ package com.intech.comptabilite.service.businessmanager;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
@@ -136,11 +138,27 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
             throw new FunctionalException(
                 "L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
         }
+        
+        if (this.checkEcritureComptableReference(pEcritureComptable)) {
+            throw new FunctionalException("La référence");
+        }
 
-        // TODO ===== RG_Compta_5 : Format et contenu de la référence
-        // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
     }
-
+    
+    protected Boolean checkEcritureComptableReference(EcritureComptable pEcritureComptable) {
+        Date ecritureComptableDate = pEcritureComptable.getDate();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(ecritureComptableDate);
+        int year = calendar.get(Calendar.YEAR);
+        
+        String code = pEcritureComptable.getJournal().getCode();
+        String ref = pEcritureComptable.getReference();
+        
+        String regex = "^" + code + "-" + year + "\\/\\d{5}";
+        
+        Boolean isRefValid = ref.matches(regex);
+        return isRefValid;
+    }
 
     /**
      * Vérifie que l'Ecriture comptable respecte les règles de gestion liées au contexte
