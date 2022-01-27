@@ -36,9 +36,9 @@ public class EcritureComptableServiceTest {
 
         vEcriture.setLibelle("Equilibrée");
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "301"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", "33.00"));
+        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "301.00"));
+        vEcriture.getListLigneEcriture().add(this.createLigne(2, "40.00", "7.00"));
         Assertions.assertTrue(ecritureComptableService.isEquilibree(vEcriture));
 
         vEcriture.getListLigneEcriture().clear();
